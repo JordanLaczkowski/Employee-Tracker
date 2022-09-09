@@ -1,14 +1,7 @@
-const express = require("express");
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
 const prompt = require("select-prompt");
-
-const PORT = process.env.PORT || 3001;
-const app = express();
-
-app.use(express.urlencoded({ extended: false }));
-app.use(express.json());
 
 const db = mysql.createConnection({
   host: "localhost",
@@ -21,14 +14,6 @@ async function apiDeps() {
     console.log(results);
   });
 }
-
-app.use((req, res) => {
-  res.status(404).end();
-});
-
-app.listen(PORT, () => {
-  console.log(`Running on port ${PORT}`);
-});
 
 openingOptions = [
   //possibly make this case "view all employees -- add employee -- break -- etc"
@@ -98,7 +83,7 @@ function optionSelected(option) {
     console.log("update employee selected");
   }
   if (option == "View all Roles") {
-    app.get("/api/roles", (req, res) => {
+    get("/api/roles", (req, res) => {
       const sql = `SELECT * FROM roles`;
 
       db.query(sql, (err, rows) => {
@@ -114,7 +99,7 @@ function optionSelected(option) {
     });
   }
   if (option == "Add Role") {
-    app.post("/api/role", ({ body }, res) => {
+    post("/api/role", ({ body }, res) => {
       const sql = `INSERT INTO role (??)
           VALUES (?)`;
       const params = [body.id, body.title, body.salary, body.department_id];
@@ -132,7 +117,7 @@ function optionSelected(option) {
     });
   }
   if (option == "View all Departments") {
-    app.get("/api/department", (req, res) => {
+    get("/api/department", (req, res) => {
       const sql = `SELECT * FROM department`;
 
       db.query(sql, (err, rows) => {
