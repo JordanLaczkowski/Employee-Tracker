@@ -56,28 +56,27 @@ function optionSelected(option) {
     });
   }
   if (option == "Add Employee") {
-    app.post("/api/employee", ({ body }, res) => {
-      const sql = `INSERT INTO employee (??)
-        VALUES (?)`;
-      const params = [
-        body.id,
-        body.first_name,
-        body.last_name,
-        body.role_id,
-        body.manager_id,
-      ];
-
-      db.query(sql, params, (err, result) => {
-        if (err) {
-          res.status(400).json({ error: err.message });
-          return;
-        }
-        res.json({
-          message: "success",
-          data: body,
-        });
-      });
-    });
+    // post("/api/employee", ({ body }, res) => {
+    //   const sql = `INSERT INTO employee (??)
+    //     VALUES (?)`;
+    //   const params = [
+    //     body.id,
+    //     body.first_name,
+    //     body.last_name,
+    //     body.role_id,
+    //     body.manager_id,
+    //   ];
+    //   db.query(sql, params, (err, result) => {
+    //     if (err) {
+    //       res.status(400).json({ error: err.message });
+    //       return;
+    //     }
+    //     res.json({
+    //       message: "success",
+    //       data: body,
+    //     });
+    //   });
+    // });
   }
   if (option == "Update Employee Role") {
     console.log("update employee selected");
