@@ -41,28 +41,33 @@ openingOptions = [
   { title: "Add Department", value: "Add Department" },
   { title: "Quit", value: "Quit" },
 ];
-function start() {
-  prompt(
+async function start() {
+  await prompt(
     "Welcome to the main menu. Please select one of the below choices:",
     openingOptions
-  ).on("submit", (option) => optionSelected(option));
+  ).on("submit", (option) => {
+    console.log(option);
+    return optionSelected(option);
+  });
 }
 
 function optionSelected(option) {
   if (option == "View all Employees") {
-    app.get("/api/employee", (req, res) => {
-      const sql = `SELECT * FROM employee`;
+    // app.get("/api/employee",  (req, res) =>
 
-      db.query(sql, (err, rows) => {
-        if (err) {
-          res.status(500).json({ error: err.message });
-          return;
-        }
-        res.json({
-          message: "success",
-          data: rows,
-        });
-      });
+    const sql = `SELECT * FROM employee`;
+
+    db.query(sql, (err, rows) => {
+      if (err) {
+        // res.status(500).json({ error: err.message });
+        console.log(err);
+        return;
+      }
+      // res.json({
+      //   message: "success",
+      //   data: rows,
+      // });
+      console.log(rows);
     });
   }
   if (option == "Add Employee") {
