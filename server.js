@@ -147,24 +147,24 @@ function optionSelected(option) {
       });
     });
   }
-  if (option == "Add Department") {
-    app.post("/api/department", ({ body }, res) => {
-      const sql = `INSERT INTO department (??)
-            VALUES (?)`;
-      const params = [body.id, body.first_name];
+  // if (option == "Add Department") {
+  //   app.post("/api/department", ({ body }, res) => {
+  //     const sql = `INSERT INTO department (??)
+  //           VALUES (?)`;
+  //     const params = [body.id, body.first_name];
 
-      db.query(sql, params, (err, result) => {
-        if (err) {
-          res.status(400).json({ error: err.message });
-          return;
-        }
-        res.json({
-          message: "success",
-          data: body,
-        });
-      });
-    });
-  }
+  //     db.query(sql, params, (err, result) => {
+  //       if (err) {
+  //         res.status(400).json({ error: err.message });
+  //         return;
+  //       }
+  //       res.json({
+  //         message: "success",
+  //         data: body,
+  //       });
+  //     });
+  //   });
+  // }
   if (option == "Quit") {
     return;
   }

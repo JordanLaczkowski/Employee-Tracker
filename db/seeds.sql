@@ -19,12 +19,12 @@ VALUES (1, "Sales Lead", 100000, 1),
        (8, "Lawyer", 190000, 8);
 
 
-INSERT INTO role (id, first_name, last_name, role_id, manager_id)
-VALUES (1, "Michael", "Malone", 1, NULL),
-       (2, "Nikola", "Jokic", 2, 1),
-       (3, "Jamal", "Murray" 3, NULL),
-       (4, "Zeke", "Nnaji", 4, 3),
-       (5, "Aaron", "Gordon", 5, NULL),
-       (6, "Bones", "Hyland", 6, 5),
-       (7, "Jeff", "Green", 7, NULL),
-       (8, "Marcus", "Howard", 8, 7);
+INSERT INTO role (first_name, last_name, role_id, manager_id)
+VALUES ("Michael", "Malone", 1, NULL),
+       ("Nikola", "Jokic", 2, 1),
+       ("Jamal", "Murray" 3, NULL),
+       ("Zeke", "Nnaji", 4, 3),
+       ("Aaron", "Gordon", 5, NULL),
+       ("Bones", "Hyland", 6, 5),
+       ("Jeff", "Green", 7, NULL),
+       ("Marcus", "Howard", 8, 7);
