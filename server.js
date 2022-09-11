@@ -1,3 +1,4 @@
+//took out express, not using that!
 const mysql = require("mysql2");
 const inquirer = require("inquirer");
 const cTable = require("console.table");
@@ -26,77 +27,54 @@ openingOptions = [
   { title: "Add Department", value: "Add Department" },
   { title: "Quit", value: "Quit" },
 ];
+
+//first screen, introduction
 async function start() {
   await prompt(
     "Welcome to the main menu. Please select one of the below choices:",
     openingOptions
   ).on("submit", (option) => {
-    console.log(option);
     return optionSelected(option);
   });
 }
 
+//view all employees
 function optionSelected(option) {
   if (option == "View all Employees") {
-    // app.get("/api/employee",  (req, res) =>
-
-    const sql = `SELECT * FROM employee`;
+    const sql = `SELECT * FROM employee JOIN roles ON employee.role_id = roles.id`;
 
     db.query(sql, (err, rows) => {
       if (err) {
-        // res.status(500).json({ error: err.message });
         console.log(err);
         return;
       }
-      // res.json({
-      //   message: "success",
-      //   data: rows,
-      // });
-      console.log(rows);
+
+      console.table(rows);
+      start();
     });
   }
+
   if (option == "Add Employee") {
-    // post("/api/employee", ({ body }, res) => {
-    //   const sql = `INSERT INTO employee (??)
-    //     VALUES (?)`;
-    //   const params = [
-    //     body.id,
-    //     body.first_name,
-    //     body.last_name,
-    //     body.role_id,
-    //     body.manager_id,
-    //   ];
-    //   db.query(sql, params, (err, result) => {
-    //     if (err) {
-    //       res.status(400).json({ error: err.message });
-    //       return;
-    //     }
-    //     res.json({
-    //       message: "success",
-    //       data: body,
-    //     });
-    //   });
-    // });
   }
   if (option == "Update Employee Role") {
     console.log("update employee selected");
   }
-  if (option == "View all Roles") {
-    get("/api/roles", (req, res) => {
-      const sql = `SELECT * FROM roles`;
 
-      db.query(sql, (err, rows) => {
-        if (err) {
-          res.status(500).json({ error: err.message });
-          return;
-        }
-        res.json({
-          message: "success",
-          data: rows,
-        });
-      });
+  //view all roles
+  if (option == "View all Roles") {
+    const sql = `SELECT * FROM roles`;
+
+    db.query(sql, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+
+      console.table(rows);
+      start();
     });
   }
+  //add role
   if (option == "Add Role") {
     post("/api/role", ({ body }, res) => {
       const sql = `INSERT INTO role (??)
@@ -115,40 +93,21 @@ function optionSelected(option) {
       });
     });
   }
+  //view all departments
   if (option == "View all Departments") {
-    get("/api/department", (req, res) => {
-      const sql = `SELECT * FROM department`;
+    const sql = `SELECT id, first_name FROM department`;
 
-      db.query(sql, (err, rows) => {
-        if (err) {
-          res.status(500).json({ error: err.message });
-          return;
-        }
-        res.json({
-          message: "success",
-          data: rows,
-        });
-      });
+    db.query(sql, (err, rows) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+
+      console.table(rows);
+      start();
     });
   }
-  // if (option == "Add Department") {
-  //   app.post("/api/department", ({ body }, res) => {
-  //     const sql = `INSERT INTO department (??)
-  //           VALUES (?)`;
-  //     const params = [body.id, body.first_name];
 
-  //     db.query(sql, params, (err, result) => {
-  //       if (err) {
-  //         res.status(400).json({ error: err.message });
-  //         return;
-  //       }
-  //       res.json({
-  //         message: "success",
-  //         data: body,
-  //       });
-  //     });
-  //   });
-  // }
   if (option == "Quit") {
     return;
   }
@@ -157,10 +116,3 @@ function optionSelected(option) {
 start();
 
 module.exports = "server.js";
-
-/*
-Questions: 
-1. How to get database running and how to insert data?
-2. What should my sql queries look like?
-3. How to update using sql?
-*/
