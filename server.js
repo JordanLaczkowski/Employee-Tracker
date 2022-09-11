@@ -39,7 +39,7 @@ async function start() {
 }
 
 //view all employees
-function optionSelected(option) {
+async function optionSelected(option) {
   if (option == "View all Employees") {
     const sql = `SELECT * FROM employee JOIN roles ON employee.role_id = roles.id`;
 
@@ -52,12 +52,6 @@ function optionSelected(option) {
       console.table(rows);
       start();
     });
-  }
-
-  if (option == "Add Employee") {
-  }
-  if (option == "Update Employee Role") {
-    console.log("update employee selected");
   }
 
   //view all roles
@@ -76,26 +70,73 @@ function optionSelected(option) {
   }
   //add role
   if (option == "Add Role") {
-    post("/api/role", ({ body }, res) => {
-      const sql = `INSERT INTO role (??)
-          VALUES (?)`;
-      const params = [body.id, body.title, body.salary, body.department_id];
+    //post("/api/role", ({ body }, res) =>
+    //try {
+    const input = await inquirer.prompt([
+      {
+        name: "role_name",
+        type: "input",
+        message: "What is the role name? ",
+      },
+      {
+        name: "salary",
+        type: "input",
+        message: "What is the role's salary? ",
+      },
+      {
+        name: "department",
+        type: "input",
+        message: "What is the role's department? ",
+      },
+    ]);
+    const sql = `INSERT INTO roles (title, salary, department_id) VALUES ("${input.role_name}", "${input.salary}", "${input.department}");`;
 
-      db.query(sql, params, (err, result) => {
-        if (err) {
-          res.status(400).json({ error: err.message });
-          return;
-        }
-        res.json({
-          message: "success",
-          data: body,
-        });
-      });
-    });
+    db.execute(sql);
+    // } catch (err) {
+    //   console.log(err);
+    // }
+    //console.table(rows);
+    start();
   }
+
+  //add employee
+  if (option == "Add Employee") {
+    //try {
+    const input = await inquirer.prompt([
+      {
+        name: "first_name",
+        type: "input",
+        message: "What is the employee's first name? ",
+      },
+      {
+        name: "last_name",
+        type: "input",
+        message: "What is the employee's last name? ",
+      },
+      {
+        name: "role",
+        type: "input",
+        message: "What is the new employees role? ",
+      },
+      {
+        name: "manager",
+        type: "input",
+        message: "Who is the employee's manager (Insert ID)? ",
+      },
+    ]);
+    const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${input.first_name}", "${input.last_name}", "${input.role}", "${input.manager}");`;
+
+    db.execute(sql);
+    // } catch (err) {
+    //   console.log(err);
+    // }
+    //console.table(rows);
+    start();
+  }
+
   //view all departments
   if (option == "View all Departments") {
-    const sql = `SELECT id, first_name FROM department`;
+    const sql = `SELECT id, department_name FROM department`;
 
     db.query(sql, (err, rows) => {
       if (err) {
@@ -108,6 +149,72 @@ function optionSelected(option) {
     });
   }
 
+  //add department
+  if (option == "Add Department") {
+    //try {
+    const input = await inquirer.prompt([
+      {
+        name: "department_name",
+        type: "input",
+        message: "What is the name of the department? ",
+      },
+    ]);
+    const sql = `INSERT INTO department (department_name) VALUES ("${input.department_name}");`;
+
+    db.execute(sql);
+    // } catch (err) {
+    //   console.log(err);
+    // }
+    //console.table(rows);
+    start();
+  }
+
+  //update an employee role
+  if (option == "Update Employee Role") {
+    //try {
+    const input = await inquirer.prompt([
+      {
+        type: "list",
+        name: "update_employee",
+        message: "Which employee's role would you like to update?",
+        choices: [
+          "Michael Malone",
+          "Nikola Jokic",
+          "Jamal Murray",
+          "Zeke Nnaji",
+          "Aaron Gordon",
+          "Bones Hyland",
+          "Jeff Green",
+          "Marcus Howard",
+        ],
+      },
+      {
+        type: "list",
+        name: "update_role",
+        message: "Which role do you want to assign the seleced employee?",
+        choices: [
+          "Sales Lead",
+          "Salesperson",
+          "Lead Engineer",
+          "Software Engineer",
+          "Account Manager",
+          "Accountant",
+          "Legal Team Lead",
+          "Lawyer",
+        ],
+      },
+    ]);
+
+    const sql = `INSERT employee (update_employee, update_role) VALUES ("${list.update_employee}", "${list.update_role}");`;
+
+    db.execute(sql);
+    // } catch (err) {
+    //   console.log(err);
+    // }
+    //console.table(rows);
+    start();
+  }
+
   if (option == "Quit") {
     return;
   }
@@ -116,3 +223,9 @@ function optionSelected(option) {
 start();
 
 module.exports = "server.js";
+
+// if (option == "Add Employee") {
+// }
+// if (option == "Update Employee Role") {
+//   console.log("update employee selected");
+// }
