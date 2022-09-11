@@ -17,7 +17,6 @@ async function apiDeps() {
 }
 
 openingOptions = [
-  //possibly make this case "view all employees -- add employee -- break -- etc"
   { title: "View all Employees", value: "View all Employees" },
   { title: "Add Employee", value: "Add Employee" },
   { title: "Update Employee Role", value: "Update Employee Role" },
@@ -70,8 +69,6 @@ async function optionSelected(option) {
   }
   //add role
   if (option == "Add Role") {
-    //post("/api/role", ({ body }, res) =>
-    //try {
     const input = await inquirer.prompt([
       {
         name: "role_name",
@@ -92,16 +89,12 @@ async function optionSelected(option) {
     const sql = `INSERT INTO roles (title, salary, department_id) VALUES ("${input.role_name}", "${input.salary}", "${input.department}");`;
 
     db.execute(sql);
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    //console.table(rows);
+
     start();
   }
 
   //add employee
   if (option == "Add Employee") {
-    //try {
     const input = await inquirer.prompt([
       {
         name: "first_name",
@@ -127,10 +120,7 @@ async function optionSelected(option) {
     const sql = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ("${input.first_name}", "${input.last_name}", "${input.role}", "${input.manager}");`;
 
     db.execute(sql);
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    //console.table(rows);
+
     start();
   }
 
@@ -151,7 +141,6 @@ async function optionSelected(option) {
 
   //add department
   if (option == "Add Department") {
-    //try {
     const input = await inquirer.prompt([
       {
         name: "department_name",
@@ -162,10 +151,7 @@ async function optionSelected(option) {
     const sql = `INSERT INTO department (department_name) VALUES ("${input.department_name}");`;
 
     db.execute(sql);
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    //console.table(rows);
+
     start();
   }
 
@@ -213,31 +199,13 @@ function updateEmployee() {
         db.query(
           `UPDATE employee SET role_id = "${data.update_role}" WHERE id = "${data.update_employee}"`,
           (err, result) => {
-            // console.log(err);
-            // console.log(result);
             start();
           }
         );
       });
   });
-  // const sql = `UPDATE employee (employee, role) VALUES ("${list.update_employee}", "${list.update_role}");`;
-
-  //const sql = `UPDATE employee SET roles "${newRole}" WHERE "${roles.role}`;
-
-  // db.execute(sql);
-  // } catch (err) {
-  //   console.log(err);
-  // }
-  //console.table(rows);
-  //start();
 }
 
 start();
 
 module.exports = "server.js";
-
-// if (option == "Add Employee") {
-// }
-// if (option == "Update Employee Role") {
-//   console.log("update employee selected");
-// }
