@@ -171,53 +171,65 @@ async function optionSelected(option) {
 
   //update an employee role
   if (option == "Update Employee Role") {
-    //try {
-    const input = await inquirer.prompt([
-      {
-        type: "list",
-        name: "update_employee",
-        message: "Which employee's role would you like to update?",
-        choices: [
-          "Michael Malone",
-          "Nikola Jokic",
-          "Jamal Murray",
-          "Zeke Nnaji",
-          "Aaron Gordon",
-          "Bones Hyland",
-          "Jeff Green",
-          "Marcus Howard",
-        ],
-      },
-      {
-        type: "list",
-        name: "update_role",
-        message: "Which role do you want to assign the seleced employee?",
-        choices: [
-          "Sales Lead",
-          "Salesperson",
-          "Lead Engineer",
-          "Software Engineer",
-          "Account Manager",
-          "Accountant",
-          "Legal Team Lead",
-          "Lawyer",
-        ],
-      },
-    ]);
-
-    const sql = `INSERT employee (update_employee, update_role) VALUES ("${list.update_employee}", "${list.update_role}");`;
-
-    db.execute(sql);
-    // } catch (err) {
-    //   console.log(err);
-    // }
-    //console.table(rows);
-    start();
+    await updateEmployee();
   }
 
   if (option == "Quit") {
-    return;
+    process.exit();
   }
+}
+
+function updateEmployee() {
+  let updateEmployeeList = `SELECT employee.id, employee.first_name, employee.last_name, employee.role_id, roles.title FROM employee, roles WHERE roles.id = employee.role_id`;
+  db.query(updateEmployeeList, (err, data) => {
+    inquirer
+      .prompt([
+        {
+          type: "list",
+          name: "update_employee",
+          message: "Which employee's role would you like to update?",
+          choices: data.map((emp) => ({
+            name: emp.first_name + " " + emp.last_name,
+            value: emp.id,
+          })),
+        },
+        {
+          type: "list",
+          name: "update_role",
+          message: "Which role do you want to assign the seleced employee?",
+          choices: [
+            { name: "Sales Lead", value: 1 },
+            { name: "Salesperson", value: 2 },
+            { name: "Lead Engineer", value: 3 },
+            { name: "Software Engineer", value: 4 },
+            { name: "Account Manager", value: 5 },
+            { name: "Accountant", value: 6 },
+            { name: "Legal Team Lead", value: 7 },
+            { name: "Lawyer", value: 8 },
+          ],
+        },
+      ])
+      .then((data) => {
+        db.query(
+          `UPDATE employee SET role_id = "${data.update_role}" WHERE id = "${data.update_employee}"`,
+          (err, result) => {
+            // console.log(err);
+            // console.log(result);
+            start();
+          }
+        );
+      });
+  });
+  // const sql = `UPDATE employee (employee, role) VALUES ("${list.update_employee}", "${list.update_role}");`;
+
+  //const sql = `UPDATE employee SET roles "${newRole}" WHERE "${roles.role}`;
+
+  // db.execute(sql);
+  // } catch (err) {
+  //   console.log(err);
+  // }
+  //console.table(rows);
+  //start();
 }
 
 start();
